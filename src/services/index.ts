@@ -13,7 +13,8 @@ export class Services {
       res = data;
     } catch (err) {
       console.log(err.response.data);
-      res = null;
+      // throw err;
+      
     }
     return res;
   }
@@ -28,7 +29,7 @@ export class Services {
         }
       );
     } catch (err) {
-      console.log(err.response.data);
+      throw err;
     }
   }
 }

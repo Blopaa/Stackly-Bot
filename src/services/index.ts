@@ -7,14 +7,12 @@ export class Services {
       const {
         data,
       } = await axios.get(
-        `${process.env.API_URL}serversettings/${serverId}/${columnName}`,
+        `${process.env.API_URL}serversettings/column/${serverId}/prefix`,
         { headers: { 'bot-token': process.env.BOT_TOKEN_API } }
       );
       res = data;
     } catch (err) {
       console.log(err.response.data);
-      // throw err;
-      
     }
     return res;
   }
@@ -24,6 +22,20 @@ export class Services {
       await axios.post(
         `${process.env.API_URL}server/add`,
         { "name": serverName, "serverId": serverId },
+        {
+          headers: { 'bot-token': process.env.BOT_TOKEN_API },
+        }
+      );
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async setConfigColumn(serverId: string, columnName: string, newValue: string | number ){
+    try {
+      await axios.post(
+        `${process.env.API_URL}serversettings/${serverId}`,
+        { "columnName": columnName, "newValue": newValue },
         {
           headers: { 'bot-token': process.env.BOT_TOKEN_API },
         }

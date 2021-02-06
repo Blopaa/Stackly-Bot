@@ -20,6 +20,8 @@ export class CommandsHandler {
         'prefix'
       );
 
+      console.log(prefix)
+
       if (!prefix) {
         prefix = '!!';
       }

@@ -12,7 +12,7 @@ export class Services {
       );
       res = data;
     } catch (err) {
-      console.log(err.response.data);
+      // console.log(err.response.data);
     }
     return res;
   }
@@ -28,21 +28,22 @@ export class Services {
       );
       res = data;
     } catch (err) {
-      throw new err;
+      throw new err();
     }
     return res;
   }
   async getUserByDiscordId(discordId: string) {
     let res: any;
     try {
-      const {
-        data,
-      } = await axios.get(`${process.env.API_URL}user/${discordId}`, {
-        headers: { 'bot-token': process.env.BOT_TOKEN_API },
-      });
+      const { data } = await axios.get(
+        `${process.env.API_URL}user/${discordId}`,
+        {
+          headers: { 'bot-token': process.env.BOT_TOKEN_API },
+        }
+      );
       res = data;
     } catch (err) {
-      throw new err;
+      throw new err();
     }
     return res;
   }
@@ -106,14 +107,34 @@ export class Services {
       throw err;
     }
   }
-  async winCoins(
-    serverId: string,
-    userId: string
-  ) {
+  async winCoins(serverId: string, userId: string) {
     try {
       await axios.put(
         `${process.env.API_URL}userserver/coins`,
         { serverId: serverId, userId: userId },
+        {
+          headers: { 'bot-token': process.env.BOT_TOKEN_API },
+        }
+      );
+    } catch (err) {
+      throw err;
+    }
+  }
+  async shareCoins(
+    serverId: string,
+    payerId: string,
+    payedId: string,
+    customCoinsSet: number
+  ) {
+    try {
+      await axios.put(
+        `${process.env.API_URL}userserver/sharecoins`,
+        {
+          serverId: serverId,
+          payerId: payerId,
+          payedId: payedId,
+          customCoinsSet: customCoinsSet,
+        },
         {
           headers: { 'bot-token': process.env.BOT_TOKEN_API },
         }

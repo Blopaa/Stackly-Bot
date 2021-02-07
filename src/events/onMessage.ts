@@ -22,7 +22,6 @@ export default class onMessage {
       if (!prefix) {
         prefix = '!!';
       }
-
       const commandArgument = msg.content.slice(prefix.length).split(' ');
       const parametres = commandArgument.slice(1);
       if (msg.content.startsWith(prefix)) {

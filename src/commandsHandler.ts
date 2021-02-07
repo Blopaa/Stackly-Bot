@@ -1,4 +1,3 @@
-import { Client, Message } from 'discord.js';
 import { Services } from './services';
 import { readdirSync } from 'fs';
 import { command } from './types/command';

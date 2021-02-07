@@ -13,6 +13,18 @@ export default class onMessage {
     this.commandCache = commandCache;
   }
 
+  userCreation(msg: Message) {
+    this.services.getUserByDiscordId(msg.author.id).catch(() => {
+      this.services.createUser(msg.author.id, msg.author.tag);
+      msg.author.send(
+        "a new user has been created for you, now you're able to gain coins, you just have to run !coins command"
+      );
+    });
+    this.services.createUserServer(msg.guild?.id || '', msg.author.id).catch(() => {
+        this.services.winCoins(msg.guild?.id || '', msg.author.id)
+    })
+  }
+
   on() {
     this.client.on('message', async (msg: Message) => {
       let prefix: string = await this.services.getConfigColumn(
@@ -22,6 +34,9 @@ export default class onMessage {
       if (!prefix) {
         prefix = '!!';
       }
+
+      this.userCreation(msg)
+
       const commandArgument = msg.content.slice(prefix.length).split(' ');
       const parametres = commandArgument.slice(1);
       if (msg.content.startsWith(prefix)) {

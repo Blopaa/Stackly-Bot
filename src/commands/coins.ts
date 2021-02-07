@@ -15,7 +15,7 @@ export default class coins extends baseCommand implements command {
         msg.guild?.id || '',
         msg.author.id
       );
-      msg.reply(`you have ${coins}`);
+      msg.reply(`you have ${coins.coins}`);
     } catch (error) {
         msg.reply('maybe you dont have an account,this should be an internal error please contac with a mod')
     }

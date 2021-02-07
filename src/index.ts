@@ -4,6 +4,7 @@ import { config } from 'dotenv';
 import CommandsHandler, { commandCache } from './commandsHandler';
 import { Services } from './services';
 import onMessage from './events/onMessage';
+import { OnNewMember } from './events/onNewMember';
 config();
 
 export class Main {
@@ -16,6 +17,10 @@ export class Main {
     this.client,
     this.services,
     commandCache
+  );
+  private readonly onnewmember: OnNewMember = new OnNewMember(
+    this.client,
+    this.services
   );
 
   public connect(): void {
@@ -31,6 +36,7 @@ export class Main {
     await this.connect();
     await this.commandHandler.commandHandler();
     await this.onmessage.on();
+    await this.onnewmember.on();
   }
 
   get getClient(): Client {

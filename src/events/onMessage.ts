@@ -14,15 +14,21 @@ export default class onMessage {
   }
 
   userCreation(msg: Message) {
-    this.services.getUserByDiscordId(msg.author.id).catch(() => {
-      this.services.createUser(msg.author.id, msg.author.tag);
-      msg.author.send(
-        "a new user has been created for you, now you're able to gain coins, you just have to run !coins command"
+    this.services
+      .getUserByDiscordId(msg.author.id)
+      .catch(() => {
+        this.services.createUser(msg.author.id, msg.author.tag);
+        msg.author.send(
+          "a new user has been created for you, now you're able to gain coins, you just have to run !coins command"
+        );
+      })
+      .then(() =>
+        this.services
+          .createUserServer(msg.guild?.id || '', msg.author.id)
+          .catch(() => {
+            this.services.winCoins(msg.guild?.id || '', msg.author.id);
+          })
       );
-    });
-    this.services.createUserServer(msg.guild?.id || '', msg.author.id).catch(() => {
-        this.services.winCoins(msg.guild?.id || '', msg.author.id)
-    })
   }
 
   on() {
@@ -35,7 +41,7 @@ export default class onMessage {
         prefix = '!!';
       }
 
-      this.userCreation(msg)
+      this.userCreation(msg);
 
       const commandArgument = msg.content.slice(prefix.length).split(' ');
       const parametres = commandArgument.slice(1);

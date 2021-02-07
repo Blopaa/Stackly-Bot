@@ -1,42 +1,27 @@
 import { Client, Message } from 'discord.js';
-import { SetUp } from './commands/setup';
 import { Services } from './services';
+import { readdirSync } from 'fs';
+import { command } from './types/command';
 
-export class CommandsHandler {
+export const commandCache: command[] = [];
+export default class CommandsHandler {
   constructor(
-    private readonly client: Client,
     private readonly services: Services
   ) {
-    this.client = client;
     this.services = services;
   }
 
-  private readonly setUpCommand = new SetUp(this.services);
-
   public commandHandler() {
-    this.client.on('message', async (msg: Message) => {
-      let prefix: string = await this.services.getConfigColumn(
-        msg.guild?.id || '',
-        'prefix'
-      );
+    const commands = readdirSync('./src/commands').filter((e) =>
+      e.endsWith('.ts')
+    );
 
-      console.log(prefix)
+    for (let file of commands) {
+      let pull = require(`./commands/${file}`).default;
 
-      if (!prefix) {
-        prefix = '!!';
+      if (pull) {
+        commandCache.push(new pull(this.services));
       }
-      const commandArgument = msg.content.slice(prefix.length).split(' ');
-      const command = commandArgument[0];
-      const parametres = commandArgument.slice(1);
-      if (msg.content.startsWith(prefix)) {
-        switch (command) {
-          case 'setup':
-            this.setUpCommand.createServer(msg);
-            break;
-          default:
-            msg.channel.send('command not found');
-        }
-      }
-    });
+    }
   }
 }

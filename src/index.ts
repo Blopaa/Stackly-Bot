@@ -1,14 +1,22 @@
 import { Client } from 'discord.js';
 import Discord from 'discord.js';
 import { config } from 'dotenv';
-import { CommandsHandler } from './commandsHandler';
+import CommandsHandler, { commandCache } from './commandsHandler';
 import { Services } from './services';
+import onMessage from './events/onMessage';
 config();
 
 export class Main {
   private readonly client: Client = new Discord.Client();
-  private readonly services: Services = new Services()
-  private readonly commandHandler: CommandsHandler = new CommandsHandler(this.client, this.services);
+  private readonly services: Services = new Services();
+  private readonly commandHandler: CommandsHandler = new CommandsHandler(
+    this.services
+  );
+  private readonly onmessage: onMessage = new onMessage(
+    this.client,
+    this.services,
+    commandCache
+  );
 
   public connect(): void {
     this.client.on('ready', async () => {
@@ -19,9 +27,10 @@ export class Main {
     this.client.login(`${process.env.BOT_TOKEN}`);
   }
 
-  Main() {
-    this.connect();
-    this.commandHandler.commandHandler()
+  async Main() {
+    await this.connect();
+    await this.commandHandler.commandHandler();
+    await this.onmessage.on();
   }
 
   get getClient(): Client {

@@ -1,12 +1,15 @@
 import { Message } from 'discord.js';
-import { Services } from '../../services';
+import { Services } from '../services';
+import { command } from '../types/command';
 
-export class SetUp {
+export default class SetUp implements command {
   constructor(private readonly services: Services) {
     this.services = services;
   }
 
-  async createServer(msg: Message) {
+  public readonly name: string = "setup"
+
+  public async on(msg: Message) {
     try {
       await this.services.createServer(
         msg.guild?.name || '',

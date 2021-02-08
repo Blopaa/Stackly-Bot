@@ -1,6 +1,6 @@
 import { Message } from 'discord.js';
 import { Services } from '../services';
-import { command } from '../types/command';
+import { command, commandParametres } from '../types/command';
 
 export default class config implements command {
   constructor(private readonly services: Services) {
@@ -8,8 +8,9 @@ export default class config implements command {
   }
 
   public readonly name: string = 'config';
+  public readonly description: string = 'to config your server'
 
-  public async on(msg: Message, params: string[]) {
+  public async on({msg, params}: commandParametres) {
    try {
     await this.services.setConfigColumn(
         msg.guild?.id || '',

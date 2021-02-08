@@ -1,6 +1,6 @@
 import { Message } from 'discord.js';
 import { Services } from '../services';
-import { baseCommand, command } from '../types/command';
+import { baseCommand, command, commandParametres } from '../types/command';
 
 export default class coins extends baseCommand implements command {
   constructor(protected readonly services: Services) {
@@ -8,8 +8,10 @@ export default class coins extends baseCommand implements command {
   }
 
   public readonly name: string = 'coins';
+  public readonly description: string =
+    'to show your coins Structure prefix + coins';
 
-  public async on(msg: Message) {
+  public async on({msg}: commandParametres) {
     try {
       const coins = await this.services.getCoins(
         msg.guild?.id || '',
@@ -17,7 +19,9 @@ export default class coins extends baseCommand implements command {
       );
       msg.reply(`you have ${coins.coins}`);
     } catch (error) {
-        msg.reply('maybe you dont have an account,this should be an internal error please contac with a mod')
+      msg.reply(
+        'maybe you dont have an account,this should be an internal error please contac with a mod'
+      );
     }
   }
 }

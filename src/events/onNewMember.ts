@@ -6,7 +6,6 @@ import {
   TextChannel,
 } from 'discord.js';
 import { Services } from '../services';
-import { command } from '../types/command';
 
 export class OnNewMember {
   constructor(

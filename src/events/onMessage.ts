@@ -13,8 +13,8 @@ export default class onMessage {
     this.commandCache = commandCache;
   }
 
-  userCreation(msg: Message) {
-    this.services
+  async userCreation(msg: Message) {
+    await this.services
       .getUserByDiscordId(msg.author.id)
       .catch(() => {
         this.services.createUser(msg.author.id, msg.author.tag);
@@ -29,6 +29,8 @@ export default class onMessage {
             this.services.winCoins(msg.guild?.id || '', msg.author.id);
           })
       );
+
+    return true;
   }
 
   on() {
@@ -41,19 +43,23 @@ export default class onMessage {
         prefix = '!!';
       }
 
-      this.userCreation(msg);
-
-      const commandArgument = msg.content.slice(prefix.length).split(' ');
-      const parametres = commandArgument.slice(1);
-      if (msg.content.startsWith(prefix)) {
-        if (this.commandCache.length) {
-          for await (let command of this.commandCache) {
-            if (command.name === commandArgument[0]) {
-              command.on(msg, parametres);
+      this.userCreation(msg).then(() => {
+        const commandArgument = msg.content.slice(prefix.length).split(' ');
+        const parametres = commandArgument.slice(1);
+        if (msg.content.startsWith(prefix)) {
+          if (this.commandCache.length) {
+            for (let command of this.commandCache) {
+              if (command.name === commandArgument[0]) {
+                command.on({
+                  msg,
+                  params: parametres,
+                  commandCache: this.commandCache,
+                });
+              }
             }
           }
         }
-      }
+      });
     });
   }
 }

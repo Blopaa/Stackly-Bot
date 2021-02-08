@@ -22,5 +22,7 @@ export default class CommandsHandler {
         commandCache.push(new pull(this.services));
       }
     }
+
+    console.log('commands ready')
   }
 }

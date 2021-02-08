@@ -2,8 +2,15 @@ import { Message } from "discord.js";
 import { Services } from "../services";
 
 export interface command{
-    on: (msg: Message, params: string[],) => Promise<void>;
+    on: (params: commandParametres) => Promise<void>;
     name: string
+    description: string;
+}
+
+export interface commandParametres{
+    msg: Message;
+    params: string[];
+    commandCache: command[];
 }
 
 export class baseCommand {

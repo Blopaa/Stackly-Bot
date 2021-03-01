@@ -23,6 +23,8 @@ export default class help extends baseCommand implements command {
     commandCache.map((e) => {
       embed.addField(e.name, e.description);
     });
-    await msg.channel.send(embed);
+    await msg
+      .reply('the command help was sennt to your DM')
+      .then(() => msg.author.send(embed));
   }
 }

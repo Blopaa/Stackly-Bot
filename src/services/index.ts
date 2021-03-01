@@ -7,7 +7,7 @@ export class Services {
       const {
         data,
       } = await axios.get(
-        `${process.env.API_URL}serversettings/column/${serverId}/${columnName}`,
+        `${process.env.API_URL}server-settings/column/${serverId}/${columnName}`,
         { headers: { 'bot-token': process.env.BOT_TOKEN_API } }
       );
       res = data;
@@ -23,7 +23,7 @@ export class Services {
       const {
         data,
       } = await axios.get(
-        `${process.env.API_URL}userserver/coins/${userId}/${serverId}`,
+        `${process.env.API_URL}user-server/coins/${userId}/${serverId}`,
         { headers: { 'bot-token': process.env.BOT_TOKEN_API } }
       );
       res = data;
@@ -32,6 +32,7 @@ export class Services {
     }
     return res;
   }
+
   async getUserByDiscordId(discordId: string) {
     let res: any;
     try {
@@ -51,7 +52,7 @@ export class Services {
   async createServer(serverName: string, serverId: string): Promise<void> {
     try {
       await axios.post(
-        `${process.env.API_URL}server/add`,
+        `${process.env.API_URL}server`,
         { name: serverName, serverId: serverId },
         {
           headers: { 'bot-token': process.env.BOT_TOKEN_API },
@@ -65,7 +66,7 @@ export class Services {
   async createUser(userDiscordId: string, discordTag: string): Promise<void> {
     try {
       await axios.post(
-        `${process.env.API_URL}user/add`,
+        `${process.env.API_URL}user`,
         { discordId: userDiscordId, discordTag: discordTag },
         {
           headers: { 'bot-token': process.env.BOT_TOKEN_API },
@@ -79,7 +80,7 @@ export class Services {
   async createUserServer(serverId: string, userId: string): Promise<void> {
     try {
       await axios.post(
-        `${process.env.API_URL}userserver/add/${serverId}/${userId}`,
+        `${process.env.API_URL}user-server/add/${serverId}/${userId}`,
         undefined,
         {
           headers: { 'bot-token': process.env.BOT_TOKEN_API },
@@ -97,7 +98,7 @@ export class Services {
   ) {
     try {
       await axios.put(
-        `${process.env.API_URL}serversettings/${serverId}`,
+        `${process.env.API_URL}server-settings/${serverId}`,
         { columnName: columnName, newValue: newValue },
         {
           headers: { 'bot-token': process.env.BOT_TOKEN_API },
@@ -110,7 +111,7 @@ export class Services {
   async winCoins(serverId: string, userId: string) {
     try {
       await axios.put(
-        `${process.env.API_URL}userserver/coins`,
+        `${process.env.API_URL}user-server/coins`,
         { serverId: serverId, userId: userId },
         {
           headers: { 'bot-token': process.env.BOT_TOKEN_API },
@@ -128,7 +129,7 @@ export class Services {
   ) {
     try {
       await axios.put(
-        `${process.env.API_URL}userserver/sharecoins`,
+        `${process.env.API_URL}user-server/sharecoins`,
         {
           serverId: serverId,
           payerId: payerId,

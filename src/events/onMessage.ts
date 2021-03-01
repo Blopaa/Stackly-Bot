@@ -1,4 +1,4 @@
-import { Client, Message } from 'discord.js';
+import { Client, Guild, Message } from 'discord.js';
 import { Services } from '../services';
 import { command } from '../types/command';
 
@@ -35,8 +35,10 @@ export default class onMessage {
 
   on() {
     this.client.on('message', async (msg: Message) => {
+      if(!msg.guild?.id) return;
+
       let prefix: string = await this.services.getConfigColumn(
-        msg.guild?.id || '',
+        await (<Guild>msg.guild).id,
         'prefix'
       );
       if (!prefix) {

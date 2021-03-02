@@ -10,6 +10,7 @@ export default class Transaccions extends baseCommand implements command {
   public readonly name: string = 'share';
   public readonly description: string =
     'with this command you can share coins with your friends or pay something... Structure: prefix + share + NumberOfCoins + mentionToUser';
+    public readonly authorized: string = 'everyone'
 
   public async on({msg, params}: commandParametres) {
     try {

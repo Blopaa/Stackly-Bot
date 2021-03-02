@@ -10,6 +10,7 @@ export default class coins extends baseCommand implements command {
   public readonly name: string = 'coins';
   public readonly description: string =
     'to show your coins Structure prefix + coins';
+  public readonly authorized: string = "everyone" 
 
   public async on({msg}: commandParametres) {
     try {

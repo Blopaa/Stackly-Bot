@@ -17,7 +17,7 @@ export class Services {
     return res;
   }
 
-  async getCoins(serverId: string, userId: string) {
+  async getCoins(serverId: string, userId: string): Promise<{coins: number}> {
     let res: any;
     try {
       const {
@@ -108,11 +108,17 @@ export class Services {
       throw err;
     }
   }
-  async winCoins(serverId: string, userId: string) {
+  async winCoins(serverId: string, userId: string, customCoinsSet?: number) {
     try {
       await axios.put(
         `${process.env.API_URL}user-server/coins`,
-        { serverId: serverId, userId: userId },
+        customCoinsSet
+          ? {
+              serverId: serverId,
+              userId: userId,
+              customCoinsSet: customCoinsSet,
+            }
+          : { serverId: serverId, userId: userId },
         {
           headers: { 'bot-token': process.env.BOT_TOKEN_API },
         }

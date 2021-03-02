@@ -10,6 +10,7 @@ export default class SetUp implements command {
   public readonly name: string = 'setup';
   public readonly description: string =
     'to setUp your server in the database to configure it. structure: prefix + setup';
+    public readonly authorized: string = 'mod'
 
   public async on({msg}: commandParametres) {
     try {

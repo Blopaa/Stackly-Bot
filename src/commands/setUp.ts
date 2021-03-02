@@ -10,15 +10,19 @@ export default class SetUp implements command {
   public readonly name: string = 'setup';
   public readonly description: string =
     'to setUp your server in the database to configure it. structure: prefix + setup';
-    public readonly authorized: string = 'mod'
+    public readonly authorization: string = 'mod'
 
   public async on({msg}: commandParametres) {
     try {
-      await this.services.createServer(
-        msg.guild?.name || '',
-        msg.guild?.id || ''
-      );
-      msg.channel.send('server setUp');
+      if(msg.member?.hasPermission("ADMINISTRATOR")){
+        await this.services.createServer(
+          msg.guild?.name || '',
+          msg.guild?.id || ''
+        );
+        msg.channel.send('server setUp');
+      }else{
+        return
+      }
     } catch (error) {
       msg.channel.send('an error ocurred trying to setup the server');
     }

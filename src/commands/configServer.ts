@@ -9,17 +9,21 @@ export default class config implements command {
 
   public readonly name: string = 'config';
   public readonly description: string = 'to config your server'
-  public readonly authorized: string = 'mod'
+  public readonly authorization: string = 'mod'
 
   public async on({msg, params}: commandParametres) {
    try {
-    await this.services.setConfigColumn(
+    if(msg.member?.hasPermission('ADMINISTRATOR')){
+      await this.services.setConfigColumn(
         msg.guild?.id || '',
         params[0],
         params[1]
       );
         
         msg.channel.send(`${params[0]} has been changed to ${params[1]}`)
+    }else{
+      return
+    }
    } catch (error) {
        msg.channel.send("an error ocurred trying to configure, maybe what you're tying to configure no exists")
    }

@@ -26,7 +26,9 @@ export class Main {
   public connect(): void {
     this.client.on('ready', async () => {
       console.log('bot online');
-      await this.client.user?.setActivity('Conectado');
+      await (<Discord.ClientUser>this.client.user).setActivity(
+        'Estoy siendo desarrollado por Blopa'
+      );
     });
 
     this.client.login(`${process.env.BOT_TOKEN}`);

@@ -5,7 +5,7 @@ export interface command{
     on: (params: commandParametres) => Promise<void>;
     name: string
     description: string;
-    authorized: string;
+    authorization: string;
 }
 
 export interface commandParametres{

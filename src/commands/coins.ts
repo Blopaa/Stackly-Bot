@@ -10,7 +10,7 @@ export default class coins extends baseCommand implements command {
   public readonly name: string = 'coins';
   public readonly description: string =
     'to show your coins Structure prefix + coins';
-  public readonly authorized: string = "everyone" 
+  public readonly authorization: string = "everyone" 
 
   public async on({msg}: commandParametres) {
     try {
@@ -18,7 +18,7 @@ export default class coins extends baseCommand implements command {
         msg.guild?.id || '',
         msg.author.id
       );
-      msg.reply(`you have ${coins.coins}`);
+      msg.reply(`you have ${coins.coins} coins`);
     } catch (error) {
       msg.reply(
         'maybe you dont have an account,this should be an internal error please contac with a mod'

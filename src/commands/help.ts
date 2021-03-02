@@ -13,7 +13,7 @@ export default class help extends baseCommand implements command {
 
   public readonly name: string = 'help';
   public readonly description: string = 'if you need help type prefix + help';
-  public readonly authorized: string = 'everyone'
+  public readonly authorization: string = 'everyone'
 
   async on({ msg, commandCache }: commandParametres) {
     const embed = new MessageEmbed()
@@ -22,9 +22,9 @@ export default class help extends baseCommand implements command {
         await this.services.getConfigColumn(msg.guild?.id || '', 'embedColor')
       );
     commandCache.map((e) => {
-      if(e.authorized === 'mod' && msg.member?.hasPermission("ADMINISTRATOR")){
+      if(e.authorization === 'mod' && msg.member?.hasPermission("ADMINISTRATOR")){
         embed.addField(e.name, e.description);
-      }if(e.authorized === 'everyone'){
+      }if(e.authorization === 'everyone'){
         embed.addField(e.name, e.description);
       }
     });

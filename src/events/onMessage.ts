@@ -51,7 +51,7 @@ export default class onMessage {
         if (msg.content.startsWith(prefix)) {
           if (this.commandCache.length) {
             for (let command of this.commandCache) {
-              if (command.name === commandArgument[0]) {
+              if (command.name === commandArgument[0] || command.alias === commandArgument[0]) {
                 command.on({
                   msg,
                   params: parametres,

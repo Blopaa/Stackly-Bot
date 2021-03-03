@@ -35,10 +35,10 @@ export class Main {
   }
 
   async Main() {
-    await this.connect();
-    await this.commandHandler.commandHandler();
-    await this.onmessage.on();
-    await this.onnewmember.on();
+    this.connect();
+    this.commandHandler.commandHandler();
+    this.onmessage.on();
+    this.onnewmember.on();
   }
 
   get getClient(): Client {

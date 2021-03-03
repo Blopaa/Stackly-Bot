@@ -17,7 +17,7 @@ export class Services {
     return res;
   }
 
-  async getCoins(serverId: string, userId: string): Promise<{coins: number}> {
+  async getCoins(serverId: string, userId: string): Promise<{ coins: number }> {
     let res: any;
     try {
       const {
@@ -142,6 +142,20 @@ export class Services {
           payedId: payedId,
           customCoinsSet: customCoinsSet,
         },
+        {
+          headers: { 'bot-token': process.env.BOT_TOKEN_API },
+        }
+      );
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async createStore(serverId: string): Promise<void> {
+    try {
+      await axios.post(
+        `${process.env.API_URL}store`,
+        { serverId },
         {
           headers: { 'bot-token': process.env.BOT_TOKEN_API },
         }

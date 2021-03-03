@@ -6,6 +6,7 @@ export interface command{
     name: string
     description: string;
     authorization: string;
+    alias: string;
 }
 
 export interface commandParametres{

@@ -10,9 +10,10 @@ export default class coins extends baseCommand implements command {
   public readonly name: string = 'coins';
   public readonly description: string =
     'to show your coins Structure prefix + coins';
-  public readonly authorization: string = "everyone" 
+  public readonly authorization: string = 'everyone';
+  public readonly alias = 'c';
 
-  public async on({msg}: commandParametres) {
+  public async on({ msg }: commandParametres) {
     try {
       const coins = await this.services.getCoins(
         msg.guild?.id || '',

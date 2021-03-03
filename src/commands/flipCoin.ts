@@ -11,6 +11,7 @@ export default class FlipCoin extends baseCommand implements command {
   public readonly description: string =
     'try your luck fliping a coin /n !flipCoin + tails or heads + coinBet';
   public readonly authorization: string = 'everyone';
+  public readonly alias = "fc"
 
   async on({ msg, params }: commandParametres): Promise<void> {
     const beted: string = params[0];
@@ -41,7 +42,7 @@ export default class FlipCoin extends baseCommand implements command {
       return;
     }
 
-    const result = Math.floor(Math.random() * 10) % 2 == 0 ? 'heads' : 'tails';
+    const result = Math.floor((Math.random() * 10) * bet) % 2 == 0 ? 'heads' : 'tails';
 
     if (result === beted) {
       await this.services.winCoins(

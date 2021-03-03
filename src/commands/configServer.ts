@@ -10,6 +10,7 @@ export default class config implements command {
   public readonly name: string = 'config';
   public readonly description: string = 'to config your server'
   public readonly authorization: string = 'mod'
+  public readonly alias = "cg"
 
   public async on({msg, params}: commandParametres) {
    try {

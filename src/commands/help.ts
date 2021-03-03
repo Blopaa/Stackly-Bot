@@ -14,6 +14,7 @@ export default class help extends baseCommand implements command {
   public readonly name: string = 'help';
   public readonly description: string = 'if you need help type prefix + help';
   public readonly authorization: string = 'everyone'
+  public readonly alias = "h"
 
   async on({ msg, commandCache }: commandParametres) {
     const embed = new MessageEmbed()

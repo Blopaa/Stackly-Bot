@@ -189,9 +189,20 @@ export class Services {
 
   async buyItem(buyInfo: {serverId: string, userId: string, itemId: string}): Promise<void> {
     try {
-      await axios.post(`${process.env.API_URL}user-server/buy`, buyInfo, {
+      await axios.post(`${process.env.API_URL}user-server-item/buy`, buyInfo, {
         headers: { 'bot-token': process.env.BOT_TOKEN_API },
       });
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async getUserServer(serverId: string, userId: string){
+    try {
+      const { data } = await axios.get(`${process.env.API_URL}user-server/${userId}/${serverId}`, {
+        headers: { 'bot-token': process.env.BOT_TOKEN_API },
+      });
+      return data;
     } catch (err) {
       throw err;
     }

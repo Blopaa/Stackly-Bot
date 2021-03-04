@@ -186,4 +186,14 @@ export class Services {
       throw err;
     }
   }
+
+  async buyItem(buyInfo: {serverId: string, userId: string, itemId: string}): Promise<void> {
+    try {
+      await axios.post(`${process.env.API_URL}user-server/buy`, buyInfo, {
+        headers: { 'bot-token': process.env.BOT_TOKEN_API },
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
 }

@@ -1,5 +1,6 @@
 import axios from 'axios';
-
+import { Item } from '../types/entities/item';
+import { Store } from '../types/entities/store';
 export class Services {
   async getConfigColumn(serverId: string, columnName: string) {
     let res: any;
@@ -160,6 +161,27 @@ export class Services {
           headers: { 'bot-token': process.env.BOT_TOKEN_API },
         }
       );
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async addItem(item: Item): Promise<void> {
+    try {
+      await axios.post(`${process.env.API_URL}items`, item, {
+        headers: { 'bot-token': process.env.BOT_TOKEN_API },
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async getStore(id: string): Promise<Store> {
+    try {
+      const { data } = await axios.get(`${process.env.API_URL}store/${id}`, {
+        headers: { 'bot-token': process.env.BOT_TOKEN_API },
+      });
+      return data;
     } catch (err) {
       throw err;
     }

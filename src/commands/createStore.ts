@@ -15,11 +15,11 @@ export default class createStore extends baseCommand implements command {
     try {
       if ((<GuildMember>msg.member).hasPermission('ADMINISTRATOR')) {
         await this.services.createStore((<Guild>msg.guild).id);
-        msg.reply('sucesfully created');
+        await msg.reply('sucesfully created');
       }
       return
     } catch (err) {
-      msg.reply('alredy created');
+      await msg.reply('alredy created');
     }
   }
 }

@@ -21,12 +21,12 @@ export default class config implements command {
         params[1]
       );
         
-        msg.channel.send(`${params[0]} has been changed to ${params[1]}`)
+        await msg.channel.send(`${params[0]} has been changed to ${params[1]}`)
     }else{
       return
     }
    } catch (error) {
-       msg.channel.send("an error ocurred trying to configure, maybe what you're tying to configure no exists")
+       await msg.channel.send("an error ocurred trying to configure, maybe what you're tying to configure no exists")
    }
   }
 }

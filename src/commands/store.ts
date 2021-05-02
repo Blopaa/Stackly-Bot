@@ -21,13 +21,13 @@ export default class Store extends baseCommand implements command {
         await this.services.getConfigColumn(msg.guild?.id || '', 'embedColor')
       );
     if (!store.items || !store) {
-      msg.reply(
+      await msg.reply(
         'there are no items in the shop or you have no shop, type `!cs` to create a store or type `!ai itemName price` and create an item'
       );
     }
     store.items.map((e) => {
       embed.addField(`${e.price} - ${e.name}`, e.description);
     });
-    msg.channel.send(embed);
+    await msg.channel.send(embed);
   }
 }

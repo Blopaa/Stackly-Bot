@@ -30,29 +30,29 @@ export default class addItem extends baseCommand implements command {
           );
         };
         const itemQuiz = async () => {
-          msg.channel.send('write a short description, type `cancel` to stop');
+          await msg.channel.send('write a short description, type `cancel` to stop');
           const descCollector = await collector(msg);
           if (descCollector.first()?.content == 'cancel') {
             msg.reply('stoped');
             return;
           }
           item.description = descCollector.first()?.content;
-          msg.channel.send(
+          await msg.channel.send(
             'tell me a message to say when somebody use the item, type `cancel` to stop'
           );
           const msgCollector = await collector(msg);
           if (msgCollector.first()?.content == 'cancel') {
-            msg.reply('stoped');
+            await msg.reply('stoped');
             return;
           }
           item.message = msgCollector.first()?.content;
 
-          msg.channel.send(
+          await msg.channel.send(
             'last question, the item type is a role or other? type `role` to select role or `type any letter` to not select role, type `cancel` to stop'
           );
           const typeCollector = await collector(msg);
           if (typeCollector.first()?.content == 'cancel') {
-            msg.reply('stoped');
+            await msg.reply('stoped');
             return;
           }
           if (typeCollector.first()?.content === 'role') {
@@ -91,22 +91,22 @@ export default class addItem extends baseCommand implements command {
               if (!msg.guild) throw new Error('no guild');
               item.serverId = (<Guild>msg.guild).id;
               await this.services.addItem(item);
-              msg.channel.send('saved');
+              await msg.channel.send('saved');
             } else {
               await isCorrect.reactions.cache
                 .get('✅')
                 ?.remove()
                 .catch((err) => console.log(err));
-              itemQuiz();
+              await itemQuiz();
             }
           });
           // if(await reactionCollector)
         };
 
         try {
-          itemQuiz();
+          await itemQuiz();
         } catch (error) {
-          msg.channel.send('an error ocurred');
+          await msg.channel.send('an error ocurred');
         }
       }
     } catch (error) {}

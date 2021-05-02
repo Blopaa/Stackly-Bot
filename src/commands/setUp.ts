@@ -20,12 +20,12 @@ export default class SetUp implements command {
           msg.guild?.name || '',
           msg.guild?.id || ''
         );
-        msg.channel.send('server setUp');
+        await msg.channel.send('server setUp');
       }else{
         return
       }
     } catch (error) {
-      msg.channel.send('an error ocurred trying to setup the server');
+      await msg.channel.send('an error ocurred trying to setup the server');
     }
   }
 }

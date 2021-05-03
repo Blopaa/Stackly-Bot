@@ -1,210 +1,83 @@
 import axios from 'axios';
-import { Item } from '../types/entities/item';
-import { Store } from '../types/entities/store';
+import {Item} from '../types/entities/item';
+import {Store} from '../types/entities/store';
+import {getRequest, postRequest, putRequest} from "./BaseServices";
+
 export class Services {
-  async getConfigColumn(serverId: string, columnName: string) {
-    let res: any;
-    try {
-      const {
-        data,
-      } = await axios.get(
-        `${process.env.API_URL}server-settings/column/${serverId}/${columnName}`,
-        { headers: { 'bot-token': process.env.BOT_TOKEN_API } }
-      );
-      res = data;
-    } catch (err) {
-      // console.log(err.response.data);
-    }
-    return res;
-  }
 
-  async getCoins(serverId: string, userId: string): Promise<{ coins: number }> {
-    let res: any;
-    try {
-      const {
-        data,
-      } = await axios.get(
-        `${process.env.API_URL}user-server/coins/${userId}/${serverId}`,
-        { headers: { 'bot-token': process.env.BOT_TOKEN_API } }
-      );
-      res = data;
-    } catch (err) {
-      throw new err();
+    async getConfigColumn(serverId: string, columnName: string) {
+        return getRequest(`server-settings/column/${serverId}/${columnName}`).then(d => d.data)
     }
-    return res;
-  }
 
-  async getUserByDiscordId(discordId: string) {
-    let res: any;
-    try {
-      const { data } = await axios.get(
-        `${process.env.API_URL}user/${discordId}`,
-        {
-          headers: { 'bot-token': process.env.BOT_TOKEN_API },
-        }
-      );
-      res = data;
-    } catch (err) {
-      throw new err();
+    async getCoins(serverId: string, userId: string): Promise<{ coins: number }> {
+        return getRequest(`user-server/coins/${userId}/${serverId}`).then(d => d.data)
     }
-    return res;
-  }
 
-  async createServer(serverName: string, serverId: string): Promise<void> {
-    try {
-      await axios.post(
-        `${process.env.API_URL}server`,
-        { name: serverName, serverId: serverId },
-        {
-          headers: { 'bot-token': process.env.BOT_TOKEN_API },
-        }
-      );
-    } catch (err) {
-      throw err;
+    async getUserByDiscordId(discordId: string) {
+        return getRequest(`user/${discordId}`).then(d => d.data)
     }
-  }
 
-  async createUser(userDiscordId: string, discordTag: string): Promise<void> {
-    try {
-      await axios.post(
-        `${process.env.API_URL}user`,
-        { discordId: userDiscordId, discordTag: discordTag },
-        {
-          headers: { 'bot-token': process.env.BOT_TOKEN_API },
-        }
-      );
-    } catch (err) {
-      throw err;
+    async createServer(serverName: string, serverId: string): Promise<void> {
+        return postRequest(`server`, {name: serverName, serverId: serverId}).then(d => d.data)
     }
-  }
 
-  async createUserServer(serverId: string, userId: string): Promise<void> {
-    try {
-      await axios.post(
-        `${process.env.API_URL}user-server/add/${serverId}/${userId}`,
-        undefined,
-        {
-          headers: { 'bot-token': process.env.BOT_TOKEN_API },
-        }
-      );
-    } catch (err) {
-      throw err;
+    async createUser(userDiscordId: string, discordTag: string): Promise<void> {
+        return postRequest(`user`, {discordId: userDiscordId, discordTag: discordTag}).then(d => d.data)
     }
-  }
 
-  async setConfigColumn(
-    serverId: string,
-    columnName: string,
-    newValue: string | number
-  ) {
-    try {
-      await axios.put(
-        `${process.env.API_URL}server-settings/${serverId}`,
-        { columnName: columnName, newValue: newValue },
-        {
-          headers: { 'bot-token': process.env.BOT_TOKEN_API },
-        }
-      );
-    } catch (err) {
-      throw err;
+    async createUserServer(serverId: string, userId: string): Promise<void> {
+        return postRequest(`user-server/add/${serverId}/${userId}`, {}).then(d => d.data)
     }
-  }
-  async winCoins(serverId: string, userId: string, customCoinsSet?: number) {
-    try {
-      await axios.put(
-        `${process.env.API_URL}user-server/coins`,
-        customCoinsSet
-          ? {
-              serverId: serverId,
-              userId: userId,
-              customCoinsSet: customCoinsSet,
+
+    async setConfigColumn(
+        serverId: string,
+        columnName: string,
+        newValue: string | number
+    ) {
+        return putRequest(`server-settings/${serverId}`, {columnName: columnName, newValue: newValue}).then(d => d.data)
+    }
+
+    async winCoins(serverId: string, userId: string, customCoinsSet?: number) {
+        return putRequest(`user-server/coins`, customCoinsSet
+            ? {
+                serverId: serverId,
+                userId: userId,
+                customCoinsSet: customCoinsSet,
             }
-          : { serverId: serverId, userId: userId },
-        {
-          headers: { 'bot-token': process.env.BOT_TOKEN_API },
-        }
-      );
-    } catch (err) {
-      throw err;
+            : {serverId: serverId, userId: userId}).then(d => d.data)
     }
-  }
-  async shareCoins(
-    serverId: string,
-    payerId: string,
-    payedId: string,
-    customCoinsSet: number
-  ) {
-    try {
-      await axios.put(
-        `${process.env.API_URL}user-server/sharecoins`,
-        {
-          serverId: serverId,
-          payerId: payerId,
-          payedId: payedId,
-          customCoinsSet: customCoinsSet,
-        },
-        {
-          headers: { 'bot-token': process.env.BOT_TOKEN_API },
-        }
-      );
-    } catch (err) {
-      throw err;
-    }
-  }
 
-  async createStore(serverId: string): Promise<void> {
-    try {
-      await axios.post(
-        `${process.env.API_URL}store`,
-        { serverId },
-        {
-          headers: { 'bot-token': process.env.BOT_TOKEN_API },
-        }
-      );
-    } catch (err) {
-      throw err;
+    async shareCoins(
+        serverId: string,
+        payerId: string,
+        payedId: string,
+        customCoinsSet: number
+    ) {
+        return putRequest(`user-server/sharecoins`, {
+            serverId: serverId,
+            payerId: payerId,
+            payedId: payedId,
+            customCoinsSet: customCoinsSet,
+        }).then(d => d.data)
     }
-  }
 
-  async addItem(item: Item): Promise<void> {
-    try {
-      await axios.post(`${process.env.API_URL}items`, item, {
-        headers: { 'bot-token': process.env.BOT_TOKEN_API },
-      });
-    } catch (err) {
-      throw err;
+    async createStore(serverId: string): Promise<void> {
+        return postRequest(`store`, {serverId}).then(d => d.data)
     }
-  }
 
-  async getStore(id: string): Promise<Store> {
-    try {
-      const { data } = await axios.get(`${process.env.API_URL}store/${id}`, {
-        headers: { 'bot-token': process.env.BOT_TOKEN_API },
-      });
-      return data;
-    } catch (err) {
-      throw err;
+    async addItem(item: Item): Promise<void> {
+        return postRequest(`items`, item).then(d => d.data)
     }
-  }
 
-  async buyItem(buyInfo: {serverId: string, userId: string, itemId: string}): Promise<void> {
-    try {
-      await axios.post(`${process.env.API_URL}user-server-item/buy`, buyInfo, {
-        headers: { 'bot-token': process.env.BOT_TOKEN_API },
-      });
-    } catch (err) {
-      throw err;
+    async getStore(id: string): Promise<Store> {
+        return getRequest(`store/${id}`).then(d => d.data)
     }
-  }
 
-  async getUserServer(serverId: string, userId: string){
-    try {
-      const { data } = await axios.get(`${process.env.API_URL}user-server/${userId}/${serverId}`, {
-        headers: { 'bot-token': process.env.BOT_TOKEN_API },
-      });
-      return data;
-    } catch (err) {
-      throw err;
+    async buyItem(buyInfo: { serverId: string, userId: string, itemId: string }): Promise<void> {
+        return postRequest(`user-server-item/buy`, buyInfo).then(d => d.data)
     }
-  }
+
+    async getUserServer(serverId: string, userId: string) {
+        return getRequest(`user-server/${userId}/${serverId}`).then(d => d.data)
+    }
 }

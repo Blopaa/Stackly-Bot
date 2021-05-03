@@ -33,7 +33,7 @@ export default class addItem extends baseCommand implements command {
           await msg.channel.send('write a short description, type `cancel` to stop');
           const descCollector = await collector(msg);
           if (descCollector.first()?.content == 'cancel') {
-            msg.reply('stoped');
+            await msg.reply('stoped');
             return;
           }
           item.description = descCollector.first()?.content;

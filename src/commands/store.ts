@@ -26,7 +26,18 @@ export default class Store extends baseCommand implements command {
       );
     }
     store.items.map((e) => {
-      embed.addField(`${e.price} - ${e.name}`, e.description);
+      if (e.type == 'role') {
+        embed.addField(
+          `${e.price} - ${
+            msg.member?.guild.roles.cache.find(
+              (z) => z.id === e.name?.slice(3, e.name.length - 1)
+            )?.name
+          }`,
+          e.description
+        );
+      } else {
+        embed.addField(`${e.price} - ${e.name}`, e.description);
+      }
     });
     await msg.channel.send(embed);
   }

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {Item} from '../types/entities/item';
 import {Store} from '../types/entities/store';
 import {getRequest, postRequest, putRequest} from "./BaseServices";

@@ -161,4 +161,19 @@ export class Services {
       throw error;
     }
   }
+
+  async useItem(buyInfo: {
+    serverId: string;
+    userId: string;
+    itemId: string;
+  }): Promise<Item> {
+    try {
+      return await postRequest(`user-server-item/use`, buyInfo).then((d) => {
+        console.log(d.data);
+        return d.data;
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }

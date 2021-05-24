@@ -8,9 +8,7 @@ export const getRequest = async (url: string) => {
         const {data, status} = await axios.get( apiUri + url, {headers: { 'bot-token': process.env.BOT_TOKEN_API }})
         return {data, status}
     }catch (e) {
-        const {status} = e.response;
-        const {message} = e.response.data
-        return {status, message}
+        throw e
     }
 }
 
@@ -19,9 +17,7 @@ export const postRequest = async (url: string, body: {}) => {
         const {data, status} = await axios.post(apiUri + url, body, {headers: { 'bot-token': process.env.BOT_TOKEN_API }})
         return {data, status}
     }catch (e) {
-        const {status} = e.response;
-        const {message} = e.response.data
-        return {status, message}
+        throw e
     }
 }
 
@@ -30,9 +26,7 @@ export const deleteRequest = async (url: string ) => {
         const {data, status} = await axios.delete(apiUri + url, {headers: { 'bot-token': process.env.BOT_TOKEN_API }})
         return {data, status}
     }catch (e){
-        const {status} = e.response;
-        const {message} = e.response.data
-        return {status, message}
+        throw e
     }
 }
 
@@ -41,8 +35,6 @@ export const putRequest = async (url: string, body: {} ) => {
         const {data, status} = await axios.put(apiUri + url, body, {headers: { 'bot-token': process.env.BOT_TOKEN_API }})
         return {data, status}
     }catch (e){
-        const {status} = e.response;
-        const {message} = e.response.data
-        return {status, message}
+        throw e
     }
 }

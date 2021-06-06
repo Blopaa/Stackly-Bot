@@ -30,14 +30,7 @@ export default class UseItem extends baseCommand implements command {
         userId: msg.author.id,
         itemId: (<number>itemFound.item.id).toString(),
       })) as Item;
-
-      console.log({
-        serverId: msg.guild?.id as string,
-        userId: msg.author.id,
-        itemId: (<number>itemFound.item.id).toString(),
-      });
-
-      await msg.reply(item.message as string).catch((e) => {
+      await msg.reply(item.message as string).catch(() => {
         throw new Error();
       });
     } catch (error) {

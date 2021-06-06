@@ -1,6 +1,11 @@
 import { Item } from '../types/entities/item';
 import { Store } from '../types/entities/store';
-import { getRequest, postRequest, putRequest } from './BaseServices';
+import {
+  deleteRequest,
+  getRequest,
+  postRequest,
+  putRequest,
+} from './BaseServices';
 
 export class Services {
   async getConfigColumn(serverId: string, columnName: string) {
@@ -172,6 +177,14 @@ export class Services {
         console.log(d.data);
         return d.data;
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async removeItem(id: number): Promise<void> {
+    try {
+      return await deleteRequest(`items/${id}`).then((d) => d.data);
     } catch (error) {
       throw error;
     }

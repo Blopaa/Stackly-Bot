@@ -1,27 +1,24 @@
-"use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const index_1 = require("./index");
+'use strict';
+Object.defineProperty(exports, '__esModule', { value: true });
+exports.commandCache = void 0;
+const fs_1 = require('fs');
+exports.commandCache = [];
 class CommandsHandler {
-    constructor() {
-        this.main = new index_1.Main();
+  constructor(services) {
+    this.services = services;
+    this.services = services;
+  }
+  commandHandler() {
+    const commands = fs_1
+      .readdirSync('./src/commands')
+      .filter((e) => e.endsWith('.js'));
+    for (let file of commands) {
+      let pull = require(`./commands/${file}`).default;
+      if (pull) {
+        exports.commandCache.push(new pull(this.services));
+      }
     }
-    commandHandler() {
-        this.main.getClient.on('message', (msg) => __awaiter(this, void 0, void 0, function* () {
-            const commandArguments = msg.trim();
-            switch (commandArguments) {
-                case 'ping':
-                    msg.channel.send('pong');
-            }
-        }));
-    }
+    console.log('commands ready');
+  }
 }
 exports.default = CommandsHandler;

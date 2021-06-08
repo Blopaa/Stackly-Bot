@@ -1,6 +1,7 @@
 import { Client, Message, MessageEmbed } from 'discord.js';
 import { Services } from '../services';
 import { baseCommand, command, commandParametres } from '../types/command';
+import ServerSettings from '../types/entities/server-settings';
 
 export default class help extends baseCommand implements command {
   constructor(
@@ -13,22 +14,35 @@ export default class help extends baseCommand implements command {
 
   public readonly name: string = 'help';
   public readonly description: string = 'if you need help type prefix + help';
-  public readonly authorization: string = 'everyone'
-  public readonly alias = "h"
+  public readonly authorization: string = 'everyone';
+  public readonly alias = 'h';
 
-  async on({ msg, commandCache }: commandParametres) {
+  async on({ msg, commandCache, params }: commandParametres) {
     const embed = new MessageEmbed()
       .setTitle('HELP')
       .setColor(
         await this.services.getConfigColumn(msg.guild?.id || '', 'embedColor')
       );
-    commandCache.map((e) => {
-      if(e.authorization === 'mod' && msg.member?.hasPermission("ADMINISTRATOR")){
-        embed.addField(e.name, e.description);
-      }if(e.authorization === 'everyone'){
-        embed.addField(e.name, e.description);
-      }
-    });
+
+    if (params[0] === 'c' || params[0] === 'config') {
+      const serverSettings = new ServerSettings();
+      const properties: String[] = Object.getOwnPropertyNames(serverSettings);
+      properties.map((e) => {
+        embed.addField(e, serverSettings[<keyof ServerSettings>e]);
+      });
+    } else {
+      commandCache.map((e) => {
+        if (
+          e.authorization === 'mod' &&
+          msg.member?.hasPermission('ADMINISTRATOR')
+        ) {
+          embed.addField(e.name, e.description);
+        }
+        if (e.authorization === 'everyone') {
+          embed.addField(e.name, e.description);
+        }
+      });
+    }
     await msg
       .reply('the command help was sent to your DM')
       .then(() => msg.author.send(embed));

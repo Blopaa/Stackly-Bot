@@ -16,18 +16,33 @@ export default class onMessage {
   async userCreation(msg: Message) {
     await this.services
       .getUserByDiscordId(msg.author.id)
-      .catch(() => {
-        this.services.createUser(msg.author.id, msg.author.tag);
-        msg.author.send(
-          "a new user has been created for you, now you're able to gain coins, you just have to run !coins command"
-        );
+      .catch(async () => {
+        try {
+          await this.services.createUser(msg.author.id, msg.author.tag);
+          await msg.author.send(
+            "a new user has been created for you, now you're able to gain coins, you just have to run !coins command"
+          );
+        } catch (error) {
+          await msg.channel.send(
+            "a new user has been created for you, now you're able to gain coins, you just have to run !coins command"
+          );
+          return;
+        }
       })
-      .then(() =>
-        this.services
-          .createUserServer(msg.guild?.id || '', msg.author.id)
-          .catch(() => {
-            this.services.winCoins(msg.guild?.id || '', msg.author.id);
-          })
+      .then(
+        async () =>
+          await this.services
+            .createUserServer(msg.guild?.id || '', msg.author.id)
+            .catch(async () => {
+              try {
+                await this.services.winCoins(
+                  msg.guild?.id || '',
+                  msg.author.id
+                );
+              } catch (error) {
+                return;
+              }
+            })
       );
 
     return true;
@@ -35,12 +50,11 @@ export default class onMessage {
 
   on() {
     this.client.on('message', async (msg: Message) => {
-      if(!msg.guild?.id) return;
+      if (!msg.guild?.id) return;
 
-      let prefix: string = await this.services.getConfigColumn(
-        await (<Guild>msg.guild).id,
-        'prefix'
-      );
+      let prefix: string = await this.services
+        .getConfigColumn(await (<Guild>msg.guild).id, 'prefix')
+        .catch((e) => '!!');
       if (!prefix) {
         prefix = '!!';
       }
@@ -51,7 +65,10 @@ export default class onMessage {
         if (msg.content.startsWith(prefix)) {
           if (this.commandCache.length) {
             for (let command of this.commandCache) {
-              if (command.name === commandArgument[0] || command.alias === commandArgument[0]) {
+              if (
+                command.name === commandArgument[0] ||
+                command.alias === commandArgument[0]
+              ) {
                 command.on({
                   msg,
                   params: parametres,

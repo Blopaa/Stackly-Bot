@@ -51,6 +51,7 @@ export default class BuyItem extends baseCommand implements command {
           if (role) {
             try {
               await msg.member?.roles.add(role);
+              await msg.reply(<string>itemFound.message);
             } catch (error) {
               msg.channel.send('missing perms to add the role');
             }

@@ -16,6 +16,10 @@ export default class BuyItem extends baseCommand implements command {
     if (!msg.guild) throw new Error('no guild');
 
     let item = params[0];
+    if (!item) {
+      await msg.reply('you must write an item');
+      return;
+    }
 
     let items = (await this.services.getStore(msg.guild.id)).items;
 
@@ -25,7 +29,7 @@ export default class BuyItem extends baseCommand implements command {
         (e) =>
           e.name?.slice(3, e.name.length - 1) ==
           msg.member?.guild.roles.cache.find(
-              (z) => z.id == e.name?.slice(3, e.name.length - 1)
+            (z) => z.id == e.name?.slice(3, e.name.length - 1)
           )?.id
       );
 
@@ -46,9 +50,9 @@ export default class BuyItem extends baseCommand implements command {
           );
           if (role) {
             try {
-                await msg.member?.roles.add(role)
+              await msg.member?.roles.add(role);
             } catch (error) {
-                msg.channel.send("missing perms to add the role")
+              msg.channel.send('missing perms to add the role');
             }
           } else {
             await msg.channel.send("role doesn't exists");

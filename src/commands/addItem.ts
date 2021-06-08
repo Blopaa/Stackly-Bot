@@ -8,7 +8,7 @@ export default class addItem extends baseCommand implements command {
   constructor(protected services: Services) {
     super(services);
   }
-  public readonly name = 'createStore';
+  public readonly name = 'addItem';
   public readonly description: string = 'create an store for your server';
   public readonly authorization: string = 'mod';
   public readonly alias = 'ai';
@@ -30,7 +30,9 @@ export default class addItem extends baseCommand implements command {
           );
         };
         const itemQuiz = async () => {
-          await msg.channel.send('write a short description, type `cancel` to stop');
+          await msg.channel.send(
+            'write a short description, type `cancel` to stop'
+          );
           const descCollector = await collector(msg);
           if (descCollector.first()?.content == 'cancel') {
             await msg.reply('stoped');

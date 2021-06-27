@@ -26,9 +26,11 @@ export default class help extends baseCommand implements command {
 
     if (params[0] === 'c' || params[0] === 'config') {
       const serverSettings = new ServerSettings();
-      const properties: String[] = Object.getOwnPropertyNames(serverSettings);
+      const properties = Object.getOwnPropertyNames(serverSettings) as Array<
+        keyof ServerSettings
+      >;
       properties.map((e) => {
-        embed.addField(e, serverSettings[<keyof ServerSettings>e]);
+        embed.addField(e, serverSettings[e]);
       });
     } else {
       commandCache.map((e) => {

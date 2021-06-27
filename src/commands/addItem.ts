@@ -1,4 +1,13 @@
-import { Guild, GuildMember, Message, MessageEmbed } from 'discord.js';
+import {
+  Collection,
+  Collector,
+  Guild,
+  GuildMember,
+  Message,
+  MessageEmbed,
+  Role,
+} from 'discord.js';
+import { totalmem } from 'os';
 import { Services } from '../services';
 import { baseCommand, command, commandParametres } from '../types/command';
 import { Item } from '../types/entities/item';
@@ -15,10 +24,16 @@ export default class addItem extends baseCommand implements command {
 
   async on({ msg, params }: commandParametres) {
     try {
+      // console.log(msg.member?.guild.roles.cache);
       if ((<GuildMember>msg.member).hasPermission('ADMINISTRATOR')) {
         const item: Item = {};
+        const roleData: { name?: string; color?: string } = {};
         item.name = params[0];
         item.price = +params[1];
+        if (!params[0] || !params[1]) {
+          msg.reply('missing params');
+          return;
+        }
         const collector = async (message: Message) => {
           return await msg.channel.awaitMessages(
             (m) => m.author.id === message.author.id,
@@ -59,6 +74,17 @@ export default class addItem extends baseCommand implements command {
           }
           if (typeCollector.first()?.content === 'role') {
             item.type = 'role';
+            const role = msg.member?.guild.roles.cache.find(
+              (z) => z.name === item.name
+            );
+            if (!role) {
+              roleData.name = item.name;
+              msg.reply('write a color to show on the role');
+              const roleColorCollector = await collector(msg);
+              if (roleColorCollector.first()?.content) {
+                roleData.color = roleColorCollector.first()?.content;
+              }
+            }
           } else {
             item.type = 'no role';
           }
@@ -90,6 +116,14 @@ export default class addItem extends baseCommand implements command {
                 .get('❌')
                 ?.remove()
                 .catch((err) => console.log(err));
+              Role;
+              const createRole = await msg.guild?.roles.create({
+                data: {
+                  name: roleData.name,
+                  color: roleData.color,
+                },
+              });
+              item.name = `<@$&{createRole?.id}>`;
               if (!msg.guild) throw new Error('no guild');
               item.serverId = (<Guild>msg.guild).id;
               await this.services.addItem(item);
@@ -102,7 +136,6 @@ export default class addItem extends baseCommand implements command {
               await itemQuiz();
             }
           });
-          // if(await reactionCollector)
         };
 
         try {
